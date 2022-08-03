@@ -15,7 +15,7 @@ import java.io.IOException;
 
 @RestController
 public class Controller {
-
+    
     @GetMapping("/")
     public String hello(){
         return "Hello World";
@@ -24,11 +24,10 @@ public class Controller {
     public @ResponseBody byte[] uploadImage(@RequestBody byte[] imgByte) throws IOException {
         ByteArrayInputStream inpByte = new ByteArrayInputStream(imgByte);
         BufferedImage bufferImg = ImageIO.read(inpByte);
-        ColorSpace setColor = ColorSpace.getInstance(ColorSpace.CS_GRAY);
-        ColorConvertOp conColor = new ColorConvertOp(setColor, null);
-        BufferedImage newBufferedImg = conColor.filter(bufferImg, null);
+        BufferedImage newBufferedImg = ImageHandler.changeColor(bufferImg);
+        BufferedImage bimage = ImageHandler.resize(newBufferedImg, 50, 50);
         ByteArrayOutputStream temp = new ByteArrayOutputStream();
-        ImageIO.write(newBufferedImg, "jpg", temp);
+        ImageIO.write(bimage, "jpg", temp);
         byte[] result = temp.toByteArray();
         return result;
     }
